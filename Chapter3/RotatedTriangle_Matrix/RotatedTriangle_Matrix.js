@@ -1,5 +1,5 @@
 /**
- * 通过矩阵旋转
+ * 通过矩阵旋转/平移/缩放
  * @type {string}
  */
 //顶点着色器
@@ -14,7 +14,6 @@ let FSHADER_SOURCE =
     `void main() {\n`+
     `   gl_FragColor = vec4(1.0, 0.5, 0.0, 1.0);\n`+
     `}\n`;
-let ANGLE = 90.0;
 function main() {
     //获取canvas元素
     let canvas = document.getElementById("matrix_canvas");
@@ -30,19 +29,10 @@ function main() {
     let n = initvertexBuffers(gl);
     if(n < 0) return;
 
-    //创建旋转矩阵
-    let radian = Math.PI * ANGLE / 180.0;//角度转弧度制
-    let cosB = Math.cos(radian);
-    let sinB = Math.sin(radian);
-
-    //注意webgl中矩阵是列主序的
-    let xformMatrix = new Float32Array([
-         cosB, sinB, 0.0, 0.0,
-        -sinB, cosB, 0.0, 0.0,
-          0.0,  0.0, 1.0, 0.0,
-          0.0,  0.0, 0.0, 1.0
-    ])
-    //将旋转矩阵传输给顶点着色器
+    // let xformMatrix = RotationFun();//旋转
+    // let xformMatrix = TranslationFun();//平移
+    let xformMatrix = ScalingFun();    //缩放
+    //将矩阵传输给顶点着色器
     let u_xformMatrix = gl.getUniformLocation(gl.program, "u_xformMatrix");
     if(u_xformMatrix == null) return;
     gl.uniformMatrix4fv(u_xformMatrix, false, xformMatrix);
@@ -82,4 +72,37 @@ function initvertexBuffers(gl){
     gl.enableVertexAttribArray(a_Position);
 
     return n;
+}
+function RotationFun() {
+    let ANGLE = 90.0;
+    //创建旋转矩阵
+    let radian = Math.PI * ANGLE / 180.0;//角度转弧度制
+    let cosB = Math.cos(radian);
+    let sinB = Math.sin(radian);
+
+    //注意webgl中矩阵是列主序的
+    return new Float32Array([
+        cosB, sinB, 0.0, 0.0,
+        -sinB, cosB, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    ]);
+}
+function TranslationFun() {
+    let Tx = 0.5, Ty = 0.5, Tz = 0.0;
+    return new Float32Array([
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+         Tx,  Ty,  Tz, 1.0
+    ]);
+}
+function ScalingFun() {
+    let Sx = 1.0, Sy = 1.0, Sz = 1.0;
+    return new Float32Array([
+         Sx, 0.0, 0.0, 0.0,
+        0.0,  Sy, 0.0, 0.0,
+        0.0, 0.0,  Sz, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    ]);
 }
