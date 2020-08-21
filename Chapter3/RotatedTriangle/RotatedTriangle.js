@@ -1,3 +1,24 @@
+/**
+ * 旋转
+ * 示例:绕Z轴, 逆时针旋转β角度
+ *
+ * 已知:r为从原点到起始点p(x, y, z)的坐标
+ * 		α为x轴逆时针旋转到点p的角度
+ * 则p点坐标可以表示为:
+ * 		x = r * cosα
+ * 		y = r * sinα
+ * 同理, p'点的坐标可表示为:
+ * 		x' = r * cos(α + β)
+ * 		y' = r * sin(α + β)
+ * 三角函数两角和公式
+ * 		x' = r * (cosαcosβ  - sinαsinβ)
+ * 		y' = r * (sinαcosβ + cosαsinβ)
+ * 消除 r 和 α , 得
+ * 		x' = xcosβ - ysinβ
+ * 		y' = xsinβ + ycosβ
+ * 		z' = z
+ * @type {string}
+ */
 //顶点着色器
 let VSHADER_SOURCE =
 	`attribute vec4 a_Position;\n`+

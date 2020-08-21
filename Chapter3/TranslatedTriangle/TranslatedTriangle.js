@@ -1,3 +1,15 @@
+/**
+ * 平移
+ * 将点p(x, y, z)移动到点p'(x', y', z')
+ * Tx : 在X轴的平移距离
+ * Ty : 在Y轴的平移距离
+ * Tz : 在Z轴的平移距离
+ * 公式:
+ * 		x' = x + Tx
+ * 		y' = y + Ty
+ * 		z' = z + Tz
+ * @type {string}
+ */
 //顶点着色器
 let VSHADER_SOURCE =
 	`attribute vec4 a_Position;\n`+
@@ -48,7 +60,6 @@ function main()
 	//绘制图案
 	gl.drawArrays(gl.TRIANGLES, 0, n);
 }
-t
 function initvertexBuffers(gl)
 {
 	//创建顶点数据
