@@ -43,6 +43,15 @@ function main() {
         requestAnimationFrame(tick);//请求浏览器调用tick
     }
     tick();
+
+    let upButton = document.getElementById("up_button");
+    let downButton = document.getElementById("down_button");
+    upButton.onclick = (ev)=> {
+        clickEvent(ev);
+    };
+    downButton.onclick = (ev)=> {
+        clickEvent(ev);
+    };;
 }
 function initvertexBuffers(gl) {
     //顶点数据
@@ -94,4 +103,17 @@ function animate(angle) {
     //根据距离上次调用的时间, 更新当前旋转角度
     let newAngle = angle + (ANGLE_STEP * elapsed)/1000.0;
     return newAngle %= 360;
+}
+function clickEvent(event) {
+    let targ_data = event.target.firstChild.data;
+    console.log(targ_data);
+    if(targ_data === "up"){
+        ANGLE_STEP = ANGLE_STEP >= 360.0 ? ANGLE_STEP : ANGLE_STEP + 5.0;
+    }
+    else if(targ_data === "down"){
+        ANGLE_STEP = ANGLE_STEP <= 1.0 ? 1.0 : ANGLE_STEP - 5.0;
+    }
+    else {
+        ANGLE_STEP = 45.0;
+    }
 }
