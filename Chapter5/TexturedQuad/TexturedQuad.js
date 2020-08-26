@@ -1,3 +1,14 @@
+/**
+ * 加载纹理
+ * 步骤:
+ *  1.顶点着色器中接收顶点的纹理坐标,光栅化后传递给片元着色器.
+ *  2.片元着色器根据片元的纹理坐标,从纹理图像中抽取出纹理颜色,赋给当前片元.
+ *  3.设置顶点的纹理坐标(initVertexBuffers()).
+ *  4.准备代加载的纹理图像, 令浏览器读取它(initTexture()).
+ *  5.监听纹理图像的加载事件,一旦加载完成,就在webgl系统中使用纹理(loadTexture()).
+ * @type {string}
+ */
+
 //顶点着色器
 let VSHADER_SOURCE =
     `attribute vec4 a_Position;\n`+
@@ -31,9 +42,8 @@ function main() {
     let n = initVertexBuffers(gl);
     if(n < 0) return;
 
-    if(initTextures(gl, n)){
-        //绘制背景色
-        gl.clearColor(0.5, 0.0, 1.0, 1.0);
+    if(!initTextures(gl, n)){
+        console.log("无法配置纹理");
     }
 }
 function initVertexBuffers(gl) {
@@ -82,11 +92,11 @@ function initTextures(gl, n) {
     let image = new Image();
     if(!image) return false;
 
-    image.src = '../Resources/fountain.jpg';
     //注册加载事件的响应函数
     image.onload = ()=>{
         loadTexture(gl, n, texture, u_Sampler, image);
     }
+    image.src = '../Resources/egg.jpg';
 
     return true;
 }
@@ -106,6 +116,8 @@ function loadTexture(gl, n, texture, u_Sampler, image) {
     //将0号纹理传递给着色器
     gl.uniform1i(u_Sampler, 0);
 
+    //绘制背景色
+    gl.clearColor(0.5, 0.0, 1.0, 1.0);
     //清除canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
     //绘制图案
