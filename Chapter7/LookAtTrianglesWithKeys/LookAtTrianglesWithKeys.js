@@ -17,7 +17,7 @@ let FSHADER_SOURCE =
     `}\n`;
 function main() {
     //获取canvas节点
-    let canvas = document.getElementById("look_canvas");
+    let canvas = document.getElementById("lookK_canvas");
     if(!canvas) return;
 
     //获取webgl
@@ -32,7 +32,8 @@ function main() {
 
     let u_ViewMatrix = gl.getUniformLocation(gl.program, "u_ViewMatrix");
     if(u_ViewMatrix == null) return;
-
+    //设置背景色
+    gl.clearColor(0.5, 0.0, 1.0, 1.0);
     //设置视点 视线和上方向
     let viewMatrix = new Matrix4();
     //注册键盘事件响应函数
@@ -40,8 +41,6 @@ function main() {
         keydown(ev, gl, n, u_ViewMatrix, viewMatrix);
     };
     draw(gl, n, u_ViewMatrix, viewMatrix);
-    //设置背景色
-    gl.clearColor(0.5, 0.0, 1.0, 1.0);
 }
 function initVertexBuffers(gl) {
     //顶点数据
@@ -86,10 +85,10 @@ function initVertexBuffers(gl) {
 
 let g_eyeX = 0.20, g_eyeY = 0.25, g_eyeZ = 0.25; //视点
 function keydown(ev, gl, n, u_ViewMatrix, viewMatrix) {
-    if(ev.key == 39){
+    if(ev.keyCode === 39){
         g_eyeX += 0.01;
     }
-    else if(ev.key == 37){
+    else if(ev.keyCode === 37){
         g_eyeX -= 0.01;
     }
     else {
@@ -98,7 +97,7 @@ function keydown(ev, gl, n, u_ViewMatrix, viewMatrix) {
     draw(gl, n, u_ViewMatrix, viewMatrix);
 }
 function draw(gl, n, u_ViewMatrix, viewMatrix) {
-    viewMatrix.setLookAt(0.20, 0.25, 0.25, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    viewMatrix.setLookAt(g_eyeX, g_eyeY, g_eyeZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     //将视图矩阵传给u_ViewMatrix变量
     gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
 
